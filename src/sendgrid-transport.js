@@ -115,10 +115,14 @@ SendGridTransport.prototype.send = function(mail, callback) {
 
       var sendgridEmail = new _self.sendgrid.Email(email);
 
-      if (email.categories && email.categories.length) {
+      if (email.categories &&  Array.isArray( email.categories) ) {
         email.categories.forEach(function(category) {
           sendgridEmail.addCategory(category);
         });
+      }
+
+      if (email.unique_args &&  typeof email.unique_args == "object" ) {
+          sendgridEmail.setUniqueArgs(email.unique_args)
       }
 
       return _self.sendgrid.send(sendgridEmail, function(err, json) {
